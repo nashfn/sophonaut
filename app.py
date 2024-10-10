@@ -3,10 +3,13 @@ import openai
 import os
 import base64
 import json
+from dotenv import load_dotenv
 
 from pdfrag import load_vector_index, get_retriever, retrieve_docs_for_query
 from pdfrag import VECTOR_INDEX_PATH, LLM_QUERY_PROMPT
 
+
+load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
 
