@@ -53,7 +53,7 @@ llm = OpenAI(model="gpt-4o")
 
 Settings.llm = llm
 Settings.embed_model = embed_model
-reranker = FlagEmbeddingReranker(top_n=25, model="BAAI/bge-reranker-large",)
+
 
 
 def create_index_from_pdf(pdf_filepath):
@@ -81,6 +81,7 @@ def load_index_from_file(index_json_filepath):
     return recursive_index
 
 def create_flag_query_engine(recursive_index):
+    reranker = FlagEmbeddingReranker(top_n=25, model="BAAI/bge-reranker-large",)
     recursive_query_engine = recursive_index.as_query_engine(
         similarity_top_k=25, node_postprocessors=[reranker], verbose=True
     )
