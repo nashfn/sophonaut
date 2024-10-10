@@ -55,9 +55,10 @@ pdf_vector_index = load_vector_index(VECTOR_INDEX_PATH)
 retriever_engine = get_retriever(pdf_vector_index)
 
 async def complete_query(response_message, query):
-    retrieved_text = retrieve_docs_for_query(retriever_engine, query)
-    print(f"Retrieved text = {retrieved_text}")
-    temp_message_history = [{"role": "system", "content": LLM_QUERY_PROMPT},]
+    retrieved_context = retrieve_docs_for_query(retriever_engine, query)
+    print(f"Retrieved context = {retrieved_context}")
+    temp_message_history = [{"role": "system", "content": LLM_QUERY_PROMPT.format(
+        context_str=retrieved_context, query_str=query,)},]
     stream = await client.chat.completions.create(messages=temp_message_history, stream=True, **model_kwargs)
     async for part in stream:
         if token := part.choices[0].delta.content or "":
@@ -144,12 +145,13 @@ async def on_message(message: cl.Message):
     await response_message.send()
 
     # full message history
-
     stream = await client.chat.completions.create(messages=message_history, stream=True, tools=BASE_TOOLS, **model_kwargs)
+    await process_user_query(stream, response_message)
 
-    async for part in stream:
-        if token := part.choices[0].delta.content or "":
-            await response_message.stream_token(token)
+
+    # async for part in stream:
+    #     if token := part.choices[0].delta.content or "":
+    #         await response_message.stream_token(token)
 
     await response_message.update()
 

@@ -26,7 +26,7 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core.node_parser import MarkdownElementNodeParser
 
 LLM_QUERY_PROMPT = """
-You are an expert personal coach who can answer questions on specific coaching methods. Answer the given question purely from the text snippets provided below.
+You are an expert personal coach who can answer questions on specific coaching methods. Answer the given question purely from the context below.
 
 Coaching methodology context: {context_str}
 
@@ -89,7 +89,7 @@ def load_index_create_query_engine(recursive_index):
 
 
 def get_retriever(recursive_index):
-    retriever_engine = recursive_index.as_retriever(retrieval_mode='similarity', k=5)
+    retriever_engine = recursive_index.as_retriever(retrieval_mode='similarity', k=25)
     return retriever_engine
 
 
