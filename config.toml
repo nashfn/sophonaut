@@ -1,0 +1,9 @@
+[UI.theme.light]
+    background = "#110061"
+    paper = "#FFFFFF"
+
+    [UI.theme.light.primary]
+        main = "#110061"
+        dark = "#180039"
+        light = "#FFE7EB"
+
