@@ -5,7 +5,7 @@ import base64
 import json
 from dotenv import load_dotenv
 
-from pdfrag import load_vector_index, get_retriever, retrieve_docs_for_query
+from pdfrag import load_vector_index, get_retriever, retrieve_docs_for_query, create_flag_query_engine, flag_query
 from pdfrag import VECTOR_INDEX_PATH, LLM_QUERY_PROMPT
 
 
@@ -56,9 +56,11 @@ BASE_TOOLS =  [
 
 pdf_vector_index = load_vector_index(VECTOR_INDEX_PATH)
 retriever_engine = get_retriever(pdf_vector_index)
+#flag_retriever_engine = create_flag_query_engine(pdf_vector_index)
 
 async def complete_query(response_message, query):
     retrieved_context = retrieve_docs_for_query(retriever_engine, query)
+    #retrieved_context = flag_query(flag_retriever_engine, query)
     print(f"Retrieved context = {retrieved_context}")
     temp_message_history = [{"role": "system", "content": LLM_QUERY_PROMPT.format(
         context_str=retrieved_context, query_str=query,)},]
